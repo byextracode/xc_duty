@@ -2,6 +2,21 @@ Config  = {}
 
 Config.Locale = "en"
 
+Config.AuthorizedJobs = {
+    "offpolice",
+    "offambulance",
+    "offmechanic",
+    "offtaxi",
+    "offsupplier",
+    "offgovernment",
+    "police",
+    "ambulance",
+    "mechanic",
+    "taxi",
+    "supplier",
+    "government"
+}
+
 Config.translation = {
     ["en"] = {
         ["unauthorized"] = "Not authorized job",

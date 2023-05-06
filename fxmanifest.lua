@@ -18,3 +18,7 @@ dependencies {
     "es_extended",
     "ox_lib"
 }
+
+provides {
+    "utils"
+}
