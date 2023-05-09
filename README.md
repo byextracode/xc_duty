@@ -9,9 +9,6 @@ Provides exports function for esx job.
 - isDuty exports, (e.g. returns true if job equals police, false if job equals offpolice)
 - isAuthorized server exports, similar like isAuthorized client exports.
 
-- Preview
-Coming soon
-
 ## Framework
 - ESX
 
