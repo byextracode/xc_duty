@@ -4,6 +4,17 @@ local function exportHandler(exportName, func)
     end)
 end
 
+local function isConfiguredJob(job)
+    for i = 1, #Config.AuthorizedJobs do
+        for status, value in pairs(Config.AuthorizedJobs[i]) do
+            if job == value then
+                return true, i
+            end
+        end
+    end
+    return false
+end
+
 lib.callback.register("job:duty", function(source)
     local xPlayer = ESX.GetPlayerFromId(source)
     if not xPlayer then
@@ -16,21 +27,15 @@ lib.callback.register("job:duty", function(source)
         return labelText("err_p_jobdata")
     end
 
-    local authorized = false
-    for i = 1, #Config.AuthorizedJobs do
-        if job == Config.AuthorizedJobs[i] then
-            authorized = true
-            break
-        end
-    end
+    local authorized, index = isConfiguredJob(job)
     if not authorized then
         return labelText("unauthorized")
     end
 
-    if job:find("off") then
-        job = job:gsub("off", "")
+    if job == Config.AuthorizedJobs[index].onduty then
+        job = Config.AuthorizedJobs[index].offduty
     else
-        job = ("%s%s"):format("off", job)
+        job = Config.AuthorizedJobs[index].onduty
     end
 
     xPlayer.setJob(job, grade)

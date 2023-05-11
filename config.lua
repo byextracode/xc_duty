@@ -3,18 +3,22 @@ Config  = {}
 Config.Locale = "en"
 
 Config.AuthorizedJobs = {
-    "offpolice",
-    "offambulance",
-    "offmechanic",
-    "offtaxi",
-    "offsupplier",
-    "offgovernment",
-    "police",
-    "ambulance",
-    "mechanic",
-    "taxi",
-    "supplier",
-    "government"
+    {
+        onduty = "police", -- onduty job
+        offduty = "offpolice", -- offduty job
+    },
+    {
+        onduty = "ambulance",
+        offduty = "offambulance",
+    },
+    {
+        onduty = "mechanic",
+        offduty = "offmechanic",
+    },
+    {
+        onduty = "taxi",
+        offduty = "offtaxi",
+    }
 }
 
 Config.translation = {

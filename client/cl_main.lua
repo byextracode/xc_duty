@@ -4,12 +4,27 @@ local function exportHandler(exportName, func)
     end)
 end
 
+local function isConfiguredJob(job)
+    for i = 1, #Config.AuthorizedJobs do
+        for status, value in pairs(Config.AuthorizedJobs[i]) do
+            if job == value then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 local function isDuty()
     local job = ESX.PlayerData.job?.name
-    if job:find("off") then
-        return false
+    for i = 1, #Config.AuthorizedJobs do
+        for status, value in pairs(Config.AuthorizedJobs[i]) do
+            if job == value then
+                return status == "onduty"
+            end
+        end
     end
-    return true
+    return false
 end
 
 local function isAuthorized(authorizedJob)
@@ -49,17 +64,13 @@ local function isAuthorized(authorizedJob)
     return false
 end
 
-local function setDuty(job)
+local function setDuty()
     local job = ESX.PlayerData.job?.name
     if not job then
         return labelText("unauthorized")
     end
-    local authorized = false
-    for i = 1, #Config.AuthorizedJobs do
-        if job == Config.AuthorizedJobs[i] then
-            authorized = true
-        end
-    end
+    
+    local authorized = isConfiguredJob(job)
     if not authorized then
         return labelText("unauthorized")
     end
