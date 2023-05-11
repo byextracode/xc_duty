@@ -4,15 +4,15 @@ local function exportHandler(exportName, func)
     end)
 end
 
-local function isConfiguredJob(job)
+local function checkJob(job)
     for i = 1, #Config.AuthorizedJobs do
         for status, value in pairs(Config.AuthorizedJobs[i]) do
             if job == value then
-                return true, i
+                return true, status == "onduty", i
             end
         end
     end
-    return false
+    return false, false, nil
 end
 
 lib.callback.register("job:duty", function(source)
@@ -27,18 +27,13 @@ lib.callback.register("job:duty", function(source)
         return labelText("err_p_jobdata")
     end
 
-    local authorized, index = isConfiguredJob(job)
-    if not authorized then
+    local isValid, onDuty, index = checkJob(job)
+    if not isValid then
         return labelText("unauthorized")
     end
 
-    if job == Config.AuthorizedJobs[index].onduty then
-        job = Config.AuthorizedJobs[index].offduty
-    else
-        job = Config.AuthorizedJobs[index].onduty
-    end
-
-    xPlayer.setJob(job, grade)
+    local setJob = onDuty and Config.AuthorizedJobs[index].offduty or Config.AuthorizedJobs[index].onduty
+    xPlayer.setJob(setJob, grade)
     return true
 end)
 
@@ -46,10 +41,12 @@ local function isAuthorized(source, authorizedJob)
     if source == nil or GetPlayerName(source) == nil then
         return false
     end
+
     local xPlayer = ESX.GetPlayerFromId(source)
     if not xPlayer then
         return false
     end
+
     local job = xPlayer.job
     if job == nil then
         return false
@@ -57,6 +54,7 @@ local function isAuthorized(source, authorizedJob)
     if type(authorizedJob) ~= "table" then
         authorizedJob = {authorizedJob}
     end
+    
     local tabletype = table.type(authorizedJob)
     if tabletype == "hash" then
         local grade = authorizedJob[job.name]

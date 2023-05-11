@@ -4,27 +4,21 @@ local function exportHandler(exportName, func)
     end)
 end
 
-local function isConfiguredJob(job)
+local function checkJob(job)
+    local job = job or ESX.PlayerData.job?.name
     for i = 1, #Config.AuthorizedJobs do
         for status, value in pairs(Config.AuthorizedJobs[i]) do
             if job == value then
-                return true
+                return true, status == "onduty", i
             end
         end
     end
-    return false
+    return false, false, nil
 end
 
-local function isDuty()
-    local job = ESX.PlayerData.job?.name
-    for i = 1, #Config.AuthorizedJobs do
-        for status, value in pairs(Config.AuthorizedJobs[i]) do
-            if job == value then
-                return status == "onduty"
-            end
-        end
-    end
-    return false
+local function isDuty(job)
+    local isValid, onDuty, index = checkJob(job)
+    return onDuty
 end
 
 local function isAuthorized(authorizedJob)
@@ -37,6 +31,7 @@ local function isAuthorized(authorizedJob)
     if type(authorizedJob) ~= "table" then
         authorizedJob = {authorizedJob}
     end
+    
     local tabletype = table.type(authorizedJob)
     if tabletype == "hash" then
         local grade = authorizedJob[ESX.PlayerData.job.name]
@@ -70,8 +65,8 @@ local function setDuty()
         return labelText("unauthorized")
     end
     
-    local authorized = isConfiguredJob(job)
-    if not authorized then
+    local isValid, onDuty, index = checkJob(job)
+    if not isValid then
         return labelText("unauthorized")
     end
 
