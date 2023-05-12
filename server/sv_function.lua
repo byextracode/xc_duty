@@ -8,3 +8,23 @@ function labelText(text, ...)
     end
     return library[text]:format(...) 
 end
+
+local function exportHandler(exportName, func)
+    AddEventHandler(('__cfx_export_utils_%s'):format(exportName), function(setCB)
+        setCB(func)
+    end)
+end
+
+function checkJob(job)
+    for i = 1, #Config.AuthorizedJobs do
+        for status, value in pairs(Config.AuthorizedJobs[i]) do
+            if job == value then
+                return true, status == "onduty", i
+            end
+        end
+    end
+    return false, false, nil
+end
+
+exports("isAuthorized", isAuthorized)
+exportHandler("isAuthorized", isAuthorized)

@@ -1,86 +1,90 @@
-local function exportHandler(exportName, func)
-    AddEventHandler(('__cfx_export_utils_%s'):format(exportName), function(setCB)
-        setCB(func)
-    end)
-end
-
-local function checkJob(job)
-    local job = job or ESX.PlayerData.job?.name
+CreateThread(function()
     for i = 1, #Config.AuthorizedJobs do
-        for status, value in pairs(Config.AuthorizedJobs[i]) do
-            if job == value then
-                return true, status == "onduty", i
+        local authorizedJob = {
+            Config.AuthorizedJobs[i].onduty,
+            Config.AuthorizedJobs[i].offduty
+        }
+
+        if Config.target and Config.AuthorizedJobs[i].target then
+            local coords = Config.AuthorizedJobs[i].target.coords
+            local point = lib.points.new({
+                coords = coords,
+                distance = 5.0
+            })
+            local options = Config.AuthorizedJobs[i].target
+            options.options = {
+                {
+                    name = options.name,
+                    icon = "fa-solid fa-clipboard-check",
+                    label = "Set Duty",
+                    distance = 2.0,
+                    onSelect = function()
+                        setDuty()
+                    end,
+                    canInteract = function(entity, distance, coords, name, bone)
+                        return isAuthorized(authorizedJob)
+                    end,
+                },
+            }
+
+            local id
+            function point:onEnter()
+                id = exports["ox_target"]:addSphereZone(options)
+            end
+
+            function point:onExit()
+                exports["ox_target"]:removeZone(id)
+            end
+
+            local textUI, lastJob
+            function point:nearby()
+                local job = ESX.PlayerData.job.name
+                if self.currentDistance <= 2.0 and isAuthorized(authorizedJob) then
+                    if not textUI or job ~= lastJob then
+                        lib.showTextUI(("%s Duty"):format(isDuty() and "Off" or "On"), { icon = "eye" })
+                        textUI = true
+                        lastJob = job
+                    end
+                else
+                    if textUI then
+                        textUI = nil
+                        lib.hideTextUI()
+                    end
+                end
+                if options.marker then
+                    DrawMarker(options.marker.type, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, options.marker.scale, options.marker.scale, options.marker.scale, 200, 20, 20, 50, false, true, 2, false, nil, nil, false)    
+                else
+                    Wait(1000)
+                end
+            end
+        elseif Config.AuthorizedJobs[i].marker then
+            local coords = Config.AuthorizedJobs[i].marker.coords
+            local point = lib.points.new({
+                coords = coords,
+                distance = 5.0
+            })
+
+            local textUI, lastJob
+            function point:nearby()
+                local job = ESX.PlayerData.job.name
+                if self.currentDistance <= 1.0 and isAuthorized(authorizedJob) then
+                    if not textUI or job ~= lastJob then
+                        lib.showTextUI(("%s Duty"):format(isDuty() and "Off" or "On"), { icon = "e" })
+                        textUI = true
+                        lastJob = job
+                    end
+                    if IsControlJustPressed(0, 38) then
+                        setDuty()
+                        Wait(1000)
+                    end
+                else
+                    if textUI then
+                        textUI = nil
+                        lib.hideTextUI()
+                    end
+                end
+                DrawMarker(Config.AuthorizedJobs[i].marker.type, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, 200, 20, 20, 50, false, true, 2, false, nil, nil, false)
             end
         end
     end
-    return false, false, nil
-end
-
-local function isDuty(job)
-    local isValid, onDuty, index = checkJob(job)
-    return onDuty
-end
-
-local function isAuthorized(authorizedJob)
-    while ESX == nil do
-        Wait()
-    end
-    while not ESX.PlayerLoaded do
-        Wait()
-    end
-    if type(authorizedJob) ~= "table" then
-        authorizedJob = {authorizedJob}
-    end
-    
-    local tabletype = table.type(authorizedJob)
-    if tabletype == "hash" then
-        local grade = authorizedJob[ESX.PlayerData.job.name]
-        if grade and grade <= ESX.PlayerData.job.grade then
-            return true
-        end
-    end
-    if tabletype == "mixed" then
-        if authorizedJob[ESX.PlayerData.job.name] then
-            return authorizedJob[ESX.PlayerData.job.name] <= ESX.PlayerData.job.grade
-        end
-        for index, value in pairs(authorizedJob) do
-            if value == ESX.PlayerData.job.name then
-                return true
-            end
-        end
-    end
-    if tabletype == "array" then
-        for i = 1, #authorizedJob do
-            if ESX.PlayerData.job.name == authorizedJob[i] then
-                return true
-            end
-        end
-    end
-    return false
-end
-
-local function setDuty()
-    local job = ESX.PlayerData.job?.name
-    if not job then
-        return labelText("unauthorized")
-    end
-    
-    local isValid, onDuty, index = checkJob(job)
-    if not isValid then
-        return labelText("unauthorized")
-    end
-
-    local result = lib.callback.await("job:duty")
-    if type(result) == "string" then
-        return ESX.ShowNotification(result, "error")
-    end
-    return ESX.ShowNotification(labelText("nowduty", isDuty() and "On" or "Off"), "check")
-end
-
-exports("setDuty", setDuty)
-exports("isAuthorized", isAuthorized)
-exports("isDuty", isDuty)
-
-exportHandler("setDuty", setDuty)
-exportHandler("isAuthorized", isAuthorized)
-exportHandler("isDuty", isDuty)
+end)
