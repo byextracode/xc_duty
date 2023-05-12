@@ -10,6 +10,10 @@ Provides exports function for esx job duty handle.
 - isAuthorized server exports, similar like isAuthorized client exports.
 - Configuration for job duty location.
 
+## Preview
+- [Preview 1](https://streamable.com/xcibt4) (using ox_target)
+- [Preview 2](https://streamable.com/0vujq9)
+
 ## Framework
 - ESX
 
