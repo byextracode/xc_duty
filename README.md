@@ -1,13 +1,14 @@
 # xc_duty
 
 ## Description
-Provides exports function for esx job. 
+Provides exports function for esx job duty handle. 
 
 ## Feature
 - setDuty exports, toggle job duty (e.g. police/offpolice).
 - isAuthorized exports, check current job for passed jobs.
 - isDuty exports, (e.g. returns true if job equals police, false if job equals offpolice)
 - isAuthorized server exports, similar like isAuthorized client exports.
+- Configuration for job duty location.
 
 ## Framework
 - ESX
@@ -15,6 +16,7 @@ Provides exports function for esx job.
 ## Requirement
 - ESX
 - [ox_lib](https://github.com/overextended/ox_lib)
+- [ox_target](https://github.com/overextended/ox_target) (optional)
 
 # Legal
 
