@@ -3,7 +3,7 @@ lua54 'yes'
 game 'gta5'
 
 name "xc_duty"
-version "0.1.0"
+version "1.0.0"
 description "Handles job on/off duty and job authorization."
 author "wibowo#7184"
 
