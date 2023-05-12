@@ -16,7 +16,8 @@ server_script "**/sv_*.lua"
 
 dependencies {
     "es_extended",
-    "ox_lib"
+    "ox_lib",
+    -- "ox_target" --optional
 }
 
 provides {
