@@ -6,7 +6,7 @@ Provides exports function for esx job duty handle.
 ## Feature
 - setDuty exports, toggle job duty (e.g. police/offpolice).
 - isAuthorized exports, check current job for passed jobs.
-- isDuty exports, (e.g. returns true if job equals police, false if job equals offpolice)
+- isDuty exports, (returns true if current job equals configured onduty job, false if current job equals configured offduty job)
 - isAuthorized server exports, similar like isAuthorized client exports.
 - Configuration for job duty location.
 
