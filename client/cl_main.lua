@@ -83,7 +83,7 @@ CreateThread(function()
                         lib.hideTextUI()
                     end
                 end
-                DrawMarker(Config.AuthorizedJobs[i].marker.type, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, 200, 20, 20, 50, false, true, 2, false, nil, nil, false)
+                DrawMarker(Config.AuthorizedJobs[i].marker.type, self.coords.x, self.coords.y, self.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, Config.AuthorizedJobs[i].marker.scale, 200, 20, 20, 150, false, true, 2, false, nil, nil, false)
             end
         end
     end
