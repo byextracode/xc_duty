@@ -17,18 +17,14 @@ Config.AuthorizedJobs = {
         onduty = "mechanic",
         offduty = "offmechanic",
         target = { -- if Config.target = true
-            name = "mech_harmony",
-            coords = vec3(595.44, 2785.73, 42.19),
-            radius = 0.5,
-            marker = { -- optional, could be nil or removed
-                type = 28,
-                scale = 0.5
-            }
+            name = "mech_ls",
+            coords = vec3(-344.88, -127.56, 39.5),
+            radius = 0.3
         },
         marker = { -- Config.target = false
             type = 24,
-            coords = vec3(595.44, 2785.73, 42.19),
-            scale = 0.5
+            coords = vec3(-344.88, -127.56, 39.5),
+            scale = 0.3
         }
     },
     {
