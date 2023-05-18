@@ -6,7 +6,7 @@ function labelText(text, ...)
     if library[text] == nil then
         return ("Translation [%s][%s] does not exist"):format(Config.Locale, text)
     end
-    return library[text]:format(...) 
+    return library[text]:format(...)
 end
 
 local function exportHandler(exportName, func)
@@ -42,7 +42,7 @@ function isAuthorized(authorizedJob)
     if type(authorizedJob) ~= "table" then
         authorizedJob = {authorizedJob}
     end
-    
+
     local tabletype = table.type(authorizedJob)
     if tabletype == "hash" then
         local grade = authorizedJob[ESX.PlayerData.job.name]
@@ -75,7 +75,7 @@ function setDuty()
     if not job then
         return labelText("unauthorized")
     end
-    
+
     local isValid, onDuty, index = checkJob(job)
     if not isValid then
         return labelText("unauthorized")

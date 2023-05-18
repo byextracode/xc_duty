@@ -3,7 +3,7 @@ lib.callback.register("job:duty", function(source)
     if not xPlayer then
         return labelText("err_p_data")
     end
-    
+
     local job = xPlayer.job?.name
     local grade = xPlayer.job?.grade
     if job == nil or grade == nil then

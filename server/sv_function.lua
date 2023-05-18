@@ -6,7 +6,7 @@ function labelText(text, ...)
     if library[text] == nil then
         return ("Translation [%s][%s] does not exist"):format(Config.Locale, text)
     end
-    return library[text]:format(...) 
+    return library[text]:format(...)
 end
 
 local function exportHandler(exportName, func)
@@ -43,7 +43,7 @@ local function isAuthorized(source, authorizedJob)
     if type(authorizedJob) ~= "table" then
         authorizedJob = {authorizedJob}
     end
-    
+
     local tabletype = table.type(authorizedJob)
     if tabletype == "hash" then
         local grade = authorizedJob[job.name]
