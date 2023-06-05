@@ -1,7 +1,7 @@
 # xc_duty
 
 ## Description
-Provides exports function for esx job duty handle. 
+Provides exports function for esx job duty handle.
 
 ## Feature
 - setDuty exports, toggle job duty (e.g. police/offpolice).
@@ -11,8 +11,10 @@ Provides exports function for esx job duty handle.
 - Configuration for job duty location.
 
 ## Preview
-- [Preview 1](https://streamable.com/xcibt4) (using ox_target)
-- [Preview 2](https://streamable.com/0vujq9)
+- Preview 1
+[![Preview 1](https://i.imgur.com/SSTihQk.png)](https://streamable.com/xcibt4) (using ox_target)
+- Preview 2
+[![Preview 2](https://i.imgur.com/97IELw7.png)](https://streamable.com/0vujq9)
 
 ## Framework
 - ESX
